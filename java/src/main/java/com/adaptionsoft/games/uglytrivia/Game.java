@@ -1,12 +1,10 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
 	// replace by access to Players
-    int[] places = new int[6];
     int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
     List<Player> players = new ArrayList<>();
@@ -15,12 +13,8 @@ public class Game {
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
-    public Game() {
-      deck = createDeck();
-    }
-
-    private Deck createDeck() {
-        return new Deck();
+    public Game(Deck deck) {
+        this.deck = deck;
     }
 
     public boolean isPlayable() {
@@ -31,7 +25,6 @@ public class Game {
 
 
         players.add(new Player(playerName));
-        places[howManyPlayers()] = 0;
         purses[howManyPlayers()] = 0;
         inPenaltyBox[howManyPlayers()] = false;
 
@@ -53,14 +46,7 @@ public class Game {
                 isGettingOutOfPenaltyBox = true;
 
                 System.out.println(players.get(currentPlayer).getName() + " is getting out of the penalty box");
-                places[currentPlayer] = places[currentPlayer] + roll;
-                if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
-                System.out.println(players.get(currentPlayer).getName()
-                        + "'s new location is "
-                        + places[currentPlayer]);
-                System.out.println("The category is " + currentCategory());
-                askQuestion();
+                movePlayer(roll);
             } else {
                 System.out.println(players.get(currentPlayer).getName() + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
@@ -68,16 +54,21 @@ public class Game {
 
         } else {
 
-            places[currentPlayer] = places[currentPlayer] + roll;
-            if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
-            System.out.println(players.get(currentPlayer).getName()
-                    + "'s new location is "
-                    + places[currentPlayer]);
-            System.out.println("The category is " + currentCategory());
-            askQuestion();
+            movePlayer(roll);
         }
 
+    }
+
+    private void movePlayer(int roll) {
+        Player player = players.get(currentPlayer);
+        player.move(roll);
+
+
+        System.out.println(players.get(currentPlayer).getName()
+                + "'s new location is "
+                + player.getPlace());
+        System.out.println("The category is " + currentCategory());
+        askQuestion();
     }
 
     private void askQuestion() {
@@ -87,15 +78,16 @@ public class Game {
 
 
     private String currentCategory() {
-        if (places[currentPlayer] == 0) return "Pop";
-        if (places[currentPlayer] == 4) return "Pop";
-        if (places[currentPlayer] == 8) return "Pop";
-        if (places[currentPlayer] == 1) return "Science";
-        if (places[currentPlayer] == 5) return "Science";
-        if (places[currentPlayer] == 9) return "Science";
-        if (places[currentPlayer] == 2) return "Sports";
-        if (places[currentPlayer] == 6) return "Sports";
-        if (places[currentPlayer] == 10) return "Sports";
+        Player player = players.get(currentPlayer);
+        if (player.getPlace() == 0) return "Pop";
+        if (player.getPlace() == 4) return "Pop";
+        if (player.getPlace() == 8) return "Pop";
+        if (player.getPlace() == 1) return "Science";
+        if (player.getPlace() == 5) return "Science";
+        if (player.getPlace() == 9) return "Science";
+        if (player.getPlace() == 2) return "Sports";
+        if (player.getPlace() == 6) return "Sports";
+        if (player.getPlace() == 10) return "Sports";
         return "Rock";
     }
 
