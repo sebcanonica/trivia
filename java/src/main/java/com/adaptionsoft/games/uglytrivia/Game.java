@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class Game {
-	// replace by access to Players
-    boolean[] inPenaltyBox = new boolean[6];
     List<Player> players = new ArrayList<>();
 	private final Deck deck;
 
@@ -27,8 +25,6 @@ public class Game {
 
 
         players.add(new Player(playerName));
-        inPenaltyBox[howManyPlayers()] = false;
-
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + players.size());
         return true;
@@ -42,7 +38,7 @@ public class Game {
         System.out.println(players.get(currentPlayer).getName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (inPenaltyBox[currentPlayer]) {
+        if (players.get(currentPlayer).isInPenaltyBox()) {
             if (roll % 2 != 0) {
                 isGettingOutOfPenaltyBox = true;
 
@@ -76,7 +72,6 @@ public class Game {
 
         for (Object event: events) {
             Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
-
             handler.accept(event);
         }
     }
@@ -103,7 +98,7 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (inPenaltyBox[currentPlayer]) {
+        if (players.get(currentPlayer).isInPenaltyBox()) {
             if (isGettingOutOfPenaltyBox) {
                 System.out.println("Answer was correct!!!!");
                 final GoldCoinWon goldCoinWon = players.get(currentPlayer).winGoldCoin();
@@ -147,7 +142,7 @@ public class Game {
     public boolean wrongAnswer() {
         System.out.println("Question was incorrectly answered");
         System.out.println(players.get(currentPlayer).getName() + " was sent to the penalty box");
-        inPenaltyBox[currentPlayer] = true;
+        players.get(currentPlayer).goToPenaltyBox();
 
         currentPlayer++;
         if (currentPlayer == players

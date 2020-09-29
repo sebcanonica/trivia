@@ -4,6 +4,7 @@ public class Player {
     private String name;
     private int place = 0;
     private int goldCoins = 0;
+    private boolean isInPenaltyBox = false;
 
     public Player(String playerName) {
         name = playerName;
@@ -29,5 +30,13 @@ public class Player {
 
     public boolean hasWon() {
         return goldCoins == 6;
+    }
+
+    public boolean isInPenaltyBox() {
+        return this.isInPenaltyBox;
+    }
+
+    public void goToPenaltyBox() {
+        this.isInPenaltyBox = true;
     }
 }
