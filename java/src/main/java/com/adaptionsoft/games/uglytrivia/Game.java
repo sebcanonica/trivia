@@ -63,7 +63,7 @@ public class Game {
     private void movePlayer(int roll) {
         Player player = players.get(currentPlayer);
         PlayerMoved playerMoved = player.move(roll);
-        QuestionAsked questionAsked = deck.drawQuestionFor(currentCategory());
+        QuestionAsked questionAsked = deck.drawQuestionFor(currentCategory(playerMoved.newLocation));
         List<Object> events = Arrays.asList(playerMoved, questionAsked);
 
         applyEvents(events);
@@ -86,7 +86,7 @@ public class Game {
         System.out.println(playerMoved.name
                 + "'s new location is "
                 + playerMoved.newLocation);
-        System.out.println("The category is " + currentCategory());
+        System.out.println("The category is " + currentCategory(playerMoved.newLocation));
     }
 
     private void handleQuestionAsked(Object event) {
@@ -95,18 +95,10 @@ public class Game {
         System.out.println(questionAsked.question);
     }
 
-
-    private String currentCategory() {
-        Player player = players.get(currentPlayer);
-        if (player.getPlace() == 0) return "Pop";
-        if (player.getPlace() == 4) return "Pop";
-        if (player.getPlace() == 8) return "Pop";
-        if (player.getPlace() == 1) return "Science";
-        if (player.getPlace() == 5) return "Science";
-        if (player.getPlace() == 9) return "Science";
-        if (player.getPlace() == 2) return "Sports";
-        if (player.getPlace() == 6) return "Sports";
-        if (player.getPlace() == 10) return "Sports";
+    private static String currentCategory(int location) {
+        if (location % 4 == 0) return "Pop";
+        if (location % 4 == 1) return "Science";
+        if (location % 4 == 2) return "Sports";
         return "Rock";
     }
 
