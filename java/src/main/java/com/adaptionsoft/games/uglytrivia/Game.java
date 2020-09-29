@@ -1,7 +1,10 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Game {
 	// replace by access to Players
@@ -59,19 +62,37 @@ public class Game {
 
     private void movePlayer(int roll) {
         Player player = players.get(currentPlayer);
-        player.move(roll);
+        PlayerMoved playerMoved = player.move(roll);
+        QuestionAsked questionAsked = deck.drawQuestionFor(currentCategory());
+        List<Object> events = Arrays.asList(playerMoved, questionAsked);
 
-
-        System.out.println(players.get(currentPlayer).getName()
-                + "'s new location is "
-                + player.getPlace());
-        System.out.println("The category is " + currentCategory());
-        askQuestion();
+        applyEvents(events);
     }
 
-    private void askQuestion() {
-		String question = deck.drawQuestionFor(currentCategory());
-		System.out.println(question);
+    private void applyEvents(List<Object> events) {
+        HashMap<Class, Consumer> handlers = new HashMap<>();
+        handlers.put(PlayerMoved.class, this::handlePlayerMoved);
+        handlers.put(QuestionAsked.class, this::handleQuestionAsked);
+
+        for (Object event: events) {
+            Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
+
+            handler.accept(event);
+        }
+    }
+
+    private void handlePlayerMoved(Object event) {
+        PlayerMoved playerMoved = (PlayerMoved) event;
+        System.out.println(playerMoved.name
+                + "'s new location is "
+                + playerMoved.newLocation);
+        System.out.println("The category is " + currentCategory());
+    }
+
+    private void handleQuestionAsked(Object event) {
+        QuestionAsked questionAsked = (QuestionAsked) event;
+
+        System.out.println(questionAsked.question);
     }
 
 
@@ -93,7 +114,11 @@ public class Game {
         if (inPenaltyBox[currentPlayer]) {
             if (isGettingOutOfPenaltyBox) {
                 System.out.println("Answer was correct!!!!");
-                players.get(currentPlayer).winGoldCoin();
+                final GoldCoinWon goldCoinWon = players.get(currentPlayer).winGoldCoin();
+                System.out.println(goldCoinWon.name
+                        + " now has "
+                        + goldCoinWon.goldCoinsTotal
+                        + " Gold Coins.");
 
                 boolean winner = didPlayerWin();
                 currentPlayer++;
@@ -112,7 +137,11 @@ public class Game {
         } else {
 
             System.out.println("Answer was corrent!!!!");
-            players.get(currentPlayer).winGoldCoin();
+            final GoldCoinWon goldCoinWon = players.get(currentPlayer).winGoldCoin();
+            System.out.println(goldCoinWon.name
+                    + " now has "
+                    + goldCoinWon.goldCoinsTotal
+                    + " Gold Coins.");
 
             boolean winner = didPlayerWin();
             currentPlayer++;

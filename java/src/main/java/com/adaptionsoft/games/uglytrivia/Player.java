@@ -17,16 +17,14 @@ public class Player {
         return place;
     }
 
-    public void move(int roll) {
+    public PlayerMoved move(int roll) {
         this.place = (place + roll) % 12;
+        return new PlayerMoved(place, name);
     }
 
     public GoldCoinWon winGoldCoin() {
         goldCoins++;
-        System.out.println(name
-                + " now has "
-                + goldCoins
-                + " Gold Coins.");
+        return new GoldCoinWon(name, goldCoins);
     }
 
     public boolean hasWon() {

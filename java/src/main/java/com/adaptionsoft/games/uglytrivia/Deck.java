@@ -17,15 +17,15 @@ public class Deck {
         }
     }
 
-    public String drawQuestionFor(String currentCategory) {
+    public QuestionAsked drawQuestionFor(String currentCategory) {
         if (currentCategory == "Pop")
-            return popQuestions.removeFirst();
+            return new QuestionAsked(popQuestions.removeFirst());
         if (currentCategory == "Science")
-            return scienceQuestions.removeFirst();
+            return new QuestionAsked(scienceQuestions.removeFirst());
         if (currentCategory == "Sports")
-            return sportsQuestions.removeFirst();
+            return new QuestionAsked(sportsQuestions.removeFirst());
         //if (currentCategory == "Rock")
-        return rockQuestions.removeFirst();
+        return new QuestionAsked(rockQuestions.removeFirst());
 
     }
 }
