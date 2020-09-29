@@ -35,34 +35,30 @@ public class Game {
     }
 
     public void roll(int roll) {
-        System.out.println(players.get(currentPlayer).getName() + " is the current player");
-        System.out.println("They have rolled a " + roll);
+        List<Object> events = new ArrayList<>();
+        events.add(new DiceRolled(players.get(currentPlayer).getName(), roll));
 
         if (players.get(currentPlayer).isInPenaltyBox()) {
             if (roll % 2 != 0) {
                 isGettingOutOfPenaltyBox = true;
-
-                System.out.println(players.get(currentPlayer).getName() + " is getting out of the penalty box");
-                movePlayer(roll);
+                events.add(new GetOutOfPenaltyBox(players.get(currentPlayer).getName()));
+                events.addAll(movePlayer(roll));
             } else {
-                System.out.println(players.get(currentPlayer).getName() + " is not getting out of the penalty box");
+                events.add(new NotGettingOutOfPenaltyBox(players.get(currentPlayer).getName()));
                 isGettingOutOfPenaltyBox = false;
             }
-
         } else {
-
-            movePlayer(roll);
+            events.addAll(movePlayer(roll));
         }
 
+        applyEvents(events);
     }
 
-    private void movePlayer(int roll) {
+    private List<Object> movePlayer(int roll) {
         Player player = players.get(currentPlayer);
         PlayerMoved playerMoved = player.move(roll);
         QuestionAsked questionAsked = deck.drawQuestionFor(currentCategory(playerMoved.newLocation));
-        List<Object> events = Arrays.asList(playerMoved, questionAsked);
-
-        applyEvents(events);
+        return Arrays.asList(playerMoved, questionAsked);
     }
 
     private void applyEvents(List<Object> events) {
@@ -70,6 +66,9 @@ public class Game {
         registerHandler(handlers, PlayerMoved.class, Game::handlePlayerMoved);
         registerHandler(handlers, QuestionAsked.class, Game::handleQuestionAsked);
         registerHandler(handlers, PlayerSentToPenaltyBox.class, Game::handlePlayerSentToPenaltyBox);
+        registerHandler(handlers, DiceRolled.class, Game::handle);
+        registerHandler(handlers, GetOutOfPenaltyBox.class, Game::handle);
+        registerHandler(handlers, NotGettingOutOfPenaltyBox.class, Game::handle);
 
         for (Object event: events) {
             Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
@@ -79,6 +78,19 @@ public class Game {
 
     private <T> void registerHandler(HashMap<Class, Consumer> handlers, Class<T> clazz, Consumer<T> handler) {
         handlers.put(clazz, handler);
+    }
+
+    private static void handle(NotGettingOutOfPenaltyBox event) {
+        System.out.println(event.name + " is not getting out of the penalty box");
+    }
+
+    private static void handle(GetOutOfPenaltyBox event) {
+        System.out.println(event.name + " is getting out of the penalty box");
+    }
+
+    private static void handle(DiceRolled event) {
+        System.out.println(event.name + " is the current player");
+        System.out.println("They have rolled a " + event.roll);
     }
 
     private static void handlePlayerSentToPenaltyBox(PlayerSentToPenaltyBox playerSentToPenaltyBox) {
