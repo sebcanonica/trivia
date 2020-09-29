@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Game {
 	// replace by access to Players
-    int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
     List<Player> players = new ArrayList<>();
 	private final Deck deck;
@@ -25,7 +24,6 @@ public class Game {
 
 
         players.add(new Player(playerName));
-        purses[howManyPlayers()] = 0;
         inPenaltyBox[howManyPlayers()] = false;
 
         System.out.println(playerName + " was added");
@@ -95,11 +93,7 @@ public class Game {
         if (inPenaltyBox[currentPlayer]) {
             if (isGettingOutOfPenaltyBox) {
                 System.out.println("Answer was correct!!!!");
-                purses[currentPlayer]++;
-                System.out.println(players.get(currentPlayer).getName()
-                        + " now has "
-                        + purses[currentPlayer]
-                        + " Gold Coins.");
+                players.get(currentPlayer).winGoldCoin();
 
                 boolean winner = didPlayerWin();
                 currentPlayer++;
@@ -118,11 +112,7 @@ public class Game {
         } else {
 
             System.out.println("Answer was corrent!!!!");
-            purses[currentPlayer]++;
-            System.out.println(players.get(currentPlayer).getName()
-                    + " now has "
-                    + purses[currentPlayer]
-                    + " Gold Coins.");
+            players.get(currentPlayer).winGoldCoin();
 
             boolean winner = didPlayerWin();
             currentPlayer++;
@@ -146,6 +136,6 @@ public class Game {
 
 
     private boolean didPlayerWin() {
-        return !(purses[currentPlayer] == 6);
+        return !players.get(currentPlayer).hasWon();
     }
 }
