@@ -137,38 +137,32 @@ public class Game {
                 events.add(players.get(currentPlayer).winGoldCoin());
 
                 notAWinner = didPlayerWin();
-                currentPlayer++;
-                if (currentPlayer == players
-                        .size()) currentPlayer = 0;
-            } else {
-                currentPlayer++;
-                if (currentPlayer == players
-                        .size()) currentPlayer = 0;
             }
         } else {
             System.out.println("Answer was corrent!!!!");
             events.add(players.get(currentPlayer).winGoldCoin());
 
             notAWinner = didPlayerWin();
-            currentPlayer++;
-            if (currentPlayer == players
-                    .size()) currentPlayer = 0;
         }
 
+        nextPlayer();
         applyEvents(events);
         return notAWinner;
     }
 
     public boolean wrongAnswer() {
         PlayerSentToPenaltyBox playerSentToPenaltyBox = players.get(currentPlayer).goToPenaltyBox();
-        currentPlayer++;
-        if (currentPlayer == players
-                .size()) currentPlayer = 0;
+        nextPlayer();
 
         applyEvents(Arrays.asList(playerSentToPenaltyBox));
         return true;
     }
 
+    private void nextPlayer() {
+        currentPlayer++;
+        if (currentPlayer == players
+                .size()) currentPlayer = 0;
+    }
 
     private boolean didPlayerWin() {
         return !players.get(currentPlayer).hasWon();
