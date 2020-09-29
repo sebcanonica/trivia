@@ -67,9 +67,9 @@ public class Game {
 
     private void applyEvents(List<Object> events) {
         HashMap<Class, Consumer> handlers = new HashMap<>();
-        handlers.put(PlayerMoved.class, Game::handlePlayerMoved);
-        handlers.put(QuestionAsked.class, Game::handleQuestionAsked);
-        handlers.put(PlayerSentToPenaltyBox.class, Game::handlePlayerSentToPenaltyBox);
+        registerHandler(handlers, PlayerMoved.class, Game::handlePlayerMoved);
+        registerHandler(handlers, QuestionAsked.class, Game::handleQuestionAsked);
+        registerHandler(handlers, PlayerSentToPenaltyBox.class, Game::handlePlayerSentToPenaltyBox);
 
         for (Object event: events) {
             Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
@@ -77,23 +77,23 @@ public class Game {
         }
     }
 
-    private static void handlePlayerSentToPenaltyBox(Object event) {
-        PlayerSentToPenaltyBox playerSentToPenaltyBox = (PlayerSentToPenaltyBox) event;
+    private <T> void registerHandler(HashMap<Class, Consumer> handlers, Class<T> clazz, Consumer<T> handler) {
+        handlers.put(clazz, handler);
+    }
+
+    private static void handlePlayerSentToPenaltyBox(PlayerSentToPenaltyBox playerSentToPenaltyBox) {
         System.out.println("Question was incorrectly answered");
         System.out.println(playerSentToPenaltyBox.name + " was sent to the penalty box");
     }
 
-    private static void handlePlayerMoved(Object event) {
-        PlayerMoved playerMoved = (PlayerMoved) event;
+    private static void handlePlayerMoved(PlayerMoved playerMoved) {
         System.out.println(playerMoved.name
                 + "'s new location is "
                 + playerMoved.newLocation);
         System.out.println("The category is " + currentCategory(playerMoved.newLocation));
     }
 
-    private static void handleQuestionAsked(Object event) {
-        QuestionAsked questionAsked = (QuestionAsked) event;
-
+    private static void handleQuestionAsked(QuestionAsked questionAsked) {
         System.out.println(questionAsked.question);
     }
 
