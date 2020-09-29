@@ -22,11 +22,9 @@ public class Game {
     }
 
     public boolean add(String playerName) {
-
-
         players.add(new Player(playerName));
-        System.out.println(playerName + " was added");
-        System.out.println("They are player number " + players.size());
+
+        applyEvents(Arrays.asList(new PlayerAdded(playerName, players.size())));
         return true;
     }
 
@@ -70,6 +68,7 @@ public class Game {
         registerHandler(handlers, GetOutOfPenaltyBox.class, Game::handle);
         registerHandler(handlers, NotGettingOutOfPenaltyBox.class, Game::handle);
         registerHandler(handlers, GoldCoinWon.class, Game::handle);
+        registerHandler(handlers, PlayerAdded.class, Game::handle);
 
         for (Object event: events) {
             Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
@@ -79,6 +78,11 @@ public class Game {
 
     private <T> void registerHandler(HashMap<Class, Consumer> handlers, Class<T> clazz, Consumer<T> handler) {
         handlers.put(clazz, handler);
+    }
+
+    private static void handle(PlayerAdded event) {
+        System.out.println(event.playerName + " was added");
+        System.out.println("They are player number " + event.totalNumberOfPlayers);
     }
 
     private static void handle(GoldCoinWon goldCoinWon) {
@@ -157,10 +161,11 @@ public class Game {
 
     public boolean wrongAnswer() {
         PlayerSentToPenaltyBox playerSentToPenaltyBox = players.get(currentPlayer).goToPenaltyBox();
-        applyEvents(Arrays.asList(playerSentToPenaltyBox));
         currentPlayer++;
         if (currentPlayer == players
                 .size()) currentPlayer = 0;
+
+        applyEvents(Arrays.asList(playerSentToPenaltyBox));
         return true;
     }
 
