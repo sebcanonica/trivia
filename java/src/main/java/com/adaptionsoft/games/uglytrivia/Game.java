@@ -67,8 +67,9 @@ public class Game {
 
     private void applyEvents(List<Object> events) {
         HashMap<Class, Consumer> handlers = new HashMap<>();
-        handlers.put(PlayerMoved.class, this::handlePlayerMoved);
-        handlers.put(QuestionAsked.class, this::handleQuestionAsked);
+        handlers.put(PlayerMoved.class, Game::handlePlayerMoved);
+        handlers.put(QuestionAsked.class, Game::handleQuestionAsked);
+        handlers.put(PlayerSentToPenaltyBox.class, Game::handlePlayerSentToPenaltyBox);
 
         for (Object event: events) {
             Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
@@ -76,7 +77,13 @@ public class Game {
         }
     }
 
-    private void handlePlayerMoved(Object event) {
+    private static void handlePlayerSentToPenaltyBox(Object event) {
+        PlayerSentToPenaltyBox playerSentToPenaltyBox = (PlayerSentToPenaltyBox) event;
+        System.out.println("Question was incorrectly answered");
+        System.out.println(playerSentToPenaltyBox.name + " was sent to the penalty box");
+    }
+
+    private static void handlePlayerMoved(Object event) {
         PlayerMoved playerMoved = (PlayerMoved) event;
         System.out.println(playerMoved.name
                 + "'s new location is "
@@ -84,7 +91,7 @@ public class Game {
         System.out.println("The category is " + currentCategory(playerMoved.newLocation));
     }
 
-    private void handleQuestionAsked(Object event) {
+    private static void handleQuestionAsked(Object event) {
         QuestionAsked questionAsked = (QuestionAsked) event;
 
         System.out.println(questionAsked.question);
@@ -140,10 +147,8 @@ public class Game {
     }
 
     public boolean wrongAnswer() {
-        System.out.println("Question was incorrectly answered");
-        System.out.println(players.get(currentPlayer).getName() + " was sent to the penalty box");
-        players.get(currentPlayer).goToPenaltyBox();
-
+        PlayerSentToPenaltyBox playerSentToPenaltyBox = players.get(currentPlayer).goToPenaltyBox();
+        applyEvents(Arrays.asList(playerSentToPenaltyBox));
         currentPlayer++;
         if (currentPlayer == players
                 .size()) currentPlayer = 0;

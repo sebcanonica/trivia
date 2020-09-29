@@ -36,7 +36,8 @@ public class Player {
         return this.isInPenaltyBox;
     }
 
-    public void goToPenaltyBox() {
+    public PlayerSentToPenaltyBox goToPenaltyBox() {
         this.isInPenaltyBox = true;
+        return new PlayerSentToPenaltyBox(name);
     }
 }
