@@ -1,4 +1,6 @@
-package com.adaptionsoft.games.uglytrivia;public class PlayerMoved {
+package com.adaptionsoft.games.uglytrivia;
+
+public class PlayerMoved {
     public final int newLocation;
     public final String name;
 
