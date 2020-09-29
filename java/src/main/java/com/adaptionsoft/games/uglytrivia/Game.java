@@ -69,6 +69,7 @@ public class Game {
         registerHandler(handlers, DiceRolled.class, Game::handle);
         registerHandler(handlers, GetOutOfPenaltyBox.class, Game::handle);
         registerHandler(handlers, NotGettingOutOfPenaltyBox.class, Game::handle);
+        registerHandler(handlers, GoldCoinWon.class, Game::handle);
 
         for (Object event: events) {
             Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
@@ -78,6 +79,13 @@ public class Game {
 
     private <T> void registerHandler(HashMap<Class, Consumer> handlers, Class<T> clazz, Consumer<T> handler) {
         handlers.put(clazz, handler);
+    }
+
+    private static void handle(GoldCoinWon goldCoinWon) {
+        System.out.println(goldCoinWon.name
+                + " now has "
+                + goldCoinWon.goldCoinsTotal
+                + " Gold Coins.");
     }
 
     private static void handle(NotGettingOutOfPenaltyBox event) {
@@ -117,45 +125,34 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
+        List<Object> events = new ArrayList<>();
+        boolean notAWinner = true;
         if (players.get(currentPlayer).isInPenaltyBox()) {
             if (isGettingOutOfPenaltyBox) {
                 System.out.println("Answer was correct!!!!");
-                final GoldCoinWon goldCoinWon = players.get(currentPlayer).winGoldCoin();
-                System.out.println(goldCoinWon.name
-                        + " now has "
-                        + goldCoinWon.goldCoinsTotal
-                        + " Gold Coins.");
+                events.add(players.get(currentPlayer).winGoldCoin());
 
-                boolean winner = didPlayerWin();
+                notAWinner = didPlayerWin();
                 currentPlayer++;
                 if (currentPlayer == players
                         .size()) currentPlayer = 0;
-
-                return winner;
             } else {
                 currentPlayer++;
                 if (currentPlayer == players
                         .size()) currentPlayer = 0;
-                return true;
             }
-
-
         } else {
-
             System.out.println("Answer was corrent!!!!");
-            final GoldCoinWon goldCoinWon = players.get(currentPlayer).winGoldCoin();
-            System.out.println(goldCoinWon.name
-                    + " now has "
-                    + goldCoinWon.goldCoinsTotal
-                    + " Gold Coins.");
+            events.add(players.get(currentPlayer).winGoldCoin());
 
-            boolean winner = didPlayerWin();
+            notAWinner = didPlayerWin();
             currentPlayer++;
             if (currentPlayer == players
                     .size()) currentPlayer = 0;
-
-            return winner;
         }
+
+        applyEvents(events);
+        return notAWinner;
     }
 
     public boolean wrongAnswer() {
