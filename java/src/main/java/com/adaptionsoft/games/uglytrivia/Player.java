@@ -21,7 +21,7 @@ public class Player {
         this.place = (place + roll) % 12;
     }
 
-    public void winGoldCoin() {
+    public GoldCoinWon winGoldCoin() {
         goldCoins++;
         System.out.println(name
                 + " now has "
