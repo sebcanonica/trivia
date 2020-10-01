@@ -86,6 +86,7 @@ public class Game {
     }
 
     private static void handle(GoldCoinWon goldCoinWon) {
+        System.out.println("Answer was correct!!!!");
         System.out.println(goldCoinWon.name
                 + " now has "
                 + goldCoinWon.goldCoinsTotal
@@ -133,13 +134,11 @@ public class Game {
         boolean notAWinner = true;
         if (players.get(currentPlayer).isInPenaltyBox()) {
             if (isGettingOutOfPenaltyBox) {
-                System.out.println("Answer was correct!!!!");
                 events.add(players.get(currentPlayer).winGoldCoin());
 
                 notAWinner = didPlayerWin();
             }
         } else {
-            System.out.println("Answer was corrent!!!!");
             events.add(players.get(currentPlayer).winGoldCoin());
 
             notAWinner = didPlayerWin();
