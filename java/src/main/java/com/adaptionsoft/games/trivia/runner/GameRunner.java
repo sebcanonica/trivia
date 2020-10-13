@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.runner;
 import java.util.Random;
 
 import com.adaptionsoft.games.uglytrivia.Deck;
+import com.adaptionsoft.games.uglytrivia.EventPublisher;
 import com.adaptionsoft.games.uglytrivia.Game;
 
 
@@ -19,7 +20,7 @@ public class GameRunner {
     }
 
     public static void playGame(Random rand) {
-		Game aGame = new Game(createDeck());
+		Game aGame = new Game(createDeck(), new EventPublisher());
 
 		aGame.add("Chet");
 		aGame.add("Pat");

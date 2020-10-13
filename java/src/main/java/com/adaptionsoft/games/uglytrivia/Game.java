@@ -2,19 +2,19 @@ package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class Game {
+    private final IPublishEvent eventPublisher;
     List<Player> players = new ArrayList<>();
 	private final Deck deck;
 
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
-    public Game(Deck deck) {
+    public Game(Deck deck, IPublishEvent eventPublisher) {
         this.deck = deck;
+        this.eventPublisher = eventPublisher;
     }
 
     public boolean isPlayable() {
@@ -24,7 +24,7 @@ public class Game {
     public boolean add(String playerName) {
         players.add(new Player(playerName));
 
-        applyEvents(Arrays.asList(new PlayerAdded(playerName, players.size())));
+        eventPublisher.applyEvents(Arrays.asList(new PlayerAdded(playerName, players.size())));
         return true;
     }
 
@@ -49,7 +49,7 @@ public class Game {
             events.addAll(movePlayer(roll));
         }
 
-        applyEvents(events);
+        eventPublisher.applyEvents(events);
     }
 
     private List<Object> movePlayer(int roll) {
@@ -57,27 +57,6 @@ public class Game {
         PlayerMoved playerMoved = player.move(roll);
         QuestionAsked questionAsked = deck.drawQuestionFor(currentCategory(playerMoved.newLocation));
         return Arrays.asList(playerMoved, questionAsked);
-    }
-
-    private void applyEvents(List<Object> events) {
-        HashMap<Class, Consumer> handlers = new HashMap<>();
-        registerHandler(handlers, PlayerMoved.class, GameHandler::handlePlayerMoved);
-        registerHandler(handlers, QuestionAsked.class, GameHandler::handleQuestionAsked);
-        registerHandler(handlers, PlayerSentToPenaltyBox.class, GameHandler::handlePlayerSentToPenaltyBox);
-        registerHandler(handlers, DiceRolled.class, GameHandler::handle);
-        registerHandler(handlers, GetOutOfPenaltyBox.class, GameHandler::handle);
-        registerHandler(handlers, NotGettingOutOfPenaltyBox.class, GameHandler::handle);
-        registerHandler(handlers, GoldCoinWon.class, GameHandler::handle);
-        registerHandler(handlers, PlayerAdded.class, GameHandler::handle);
-
-        for (Object event: events) {
-            Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
-            handler.accept(event);
-        }
-    }
-
-    private <T> void registerHandler(HashMap<Class, Consumer> handlers, Class<T> clazz, Consumer<T> handler) {
-        handlers.put(clazz, handler);
     }
 
     private static String currentCategory(int location) {
@@ -103,7 +82,7 @@ public class Game {
         }
 
         nextPlayer();
-        applyEvents(events);
+        eventPublisher.applyEvents(events);
         return notAWinner;
     }
 
@@ -111,7 +90,7 @@ public class Game {
         PlayerSentToPenaltyBox playerSentToPenaltyBox = players.get(currentPlayer).goToPenaltyBox();
         nextPlayer();
 
-        applyEvents(Arrays.asList(playerSentToPenaltyBox));
+        eventPublisher.applyEvents(Arrays.asList(playerSentToPenaltyBox));
         return true;
     }
 
