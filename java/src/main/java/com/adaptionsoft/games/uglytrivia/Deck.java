@@ -19,13 +19,13 @@ public class Deck {
 
     public QuestionAsked drawQuestionFor(String currentCategory) {
         if (currentCategory == "Pop")
-            return new QuestionAsked(popQuestions.removeFirst());
+            return new QuestionAsked(currentCategory, popQuestions.removeFirst());
         if (currentCategory == "Science")
-            return new QuestionAsked(scienceQuestions.removeFirst());
+            return new QuestionAsked(currentCategory, scienceQuestions.removeFirst());
         if (currentCategory == "Sports")
-            return new QuestionAsked(sportsQuestions.removeFirst());
+            return new QuestionAsked(currentCategory, sportsQuestions.removeFirst());
         //if (currentCategory == "Rock")
-        return new QuestionAsked(rockQuestions.removeFirst());
+        return new QuestionAsked(currentCategory, rockQuestions.removeFirst());
 
     }
 }

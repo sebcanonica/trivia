@@ -61,14 +61,14 @@ public class Game {
 
     private void applyEvents(List<Object> events) {
         HashMap<Class, Consumer> handlers = new HashMap<>();
-        registerHandler(handlers, PlayerMoved.class, Game::handlePlayerMoved);
-        registerHandler(handlers, QuestionAsked.class, Game::handleQuestionAsked);
-        registerHandler(handlers, PlayerSentToPenaltyBox.class, Game::handlePlayerSentToPenaltyBox);
-        registerHandler(handlers, DiceRolled.class, Game::handle);
-        registerHandler(handlers, GetOutOfPenaltyBox.class, Game::handle);
-        registerHandler(handlers, NotGettingOutOfPenaltyBox.class, Game::handle);
-        registerHandler(handlers, GoldCoinWon.class, Game::handle);
-        registerHandler(handlers, PlayerAdded.class, Game::handle);
+        registerHandler(handlers, PlayerMoved.class, GameHandler::handlePlayerMoved);
+        registerHandler(handlers, QuestionAsked.class, GameHandler::handleQuestionAsked);
+        registerHandler(handlers, PlayerSentToPenaltyBox.class, GameHandler::handlePlayerSentToPenaltyBox);
+        registerHandler(handlers, DiceRolled.class, GameHandler::handle);
+        registerHandler(handlers, GetOutOfPenaltyBox.class, GameHandler::handle);
+        registerHandler(handlers, NotGettingOutOfPenaltyBox.class, GameHandler::handle);
+        registerHandler(handlers, GoldCoinWon.class, GameHandler::handle);
+        registerHandler(handlers, PlayerAdded.class, GameHandler::handle);
 
         for (Object event: events) {
             Consumer handler = handlers.getOrDefault(event.getClass(), o -> { });
@@ -78,48 +78,6 @@ public class Game {
 
     private <T> void registerHandler(HashMap<Class, Consumer> handlers, Class<T> clazz, Consumer<T> handler) {
         handlers.put(clazz, handler);
-    }
-
-    private static void handle(PlayerAdded event) {
-        System.out.println(event.playerName + " was added");
-        System.out.println("They are player number " + event.totalNumberOfPlayers);
-    }
-
-    private static void handle(GoldCoinWon goldCoinWon) {
-        System.out.println("Answer was correct!!!!");
-        System.out.println(goldCoinWon.name
-                + " now has "
-                + goldCoinWon.goldCoinsTotal
-                + " Gold Coins.");
-    }
-
-    private static void handle(NotGettingOutOfPenaltyBox event) {
-        System.out.println(event.name + " is not getting out of the penalty box");
-    }
-
-    private static void handle(GetOutOfPenaltyBox event) {
-        System.out.println(event.name + " is getting out of the penalty box");
-    }
-
-    private static void handle(DiceRolled event) {
-        System.out.println(event.name + " is the current player");
-        System.out.println("They have rolled a " + event.roll);
-    }
-
-    private static void handlePlayerSentToPenaltyBox(PlayerSentToPenaltyBox playerSentToPenaltyBox) {
-        System.out.println("Question was incorrectly answered");
-        System.out.println(playerSentToPenaltyBox.name + " was sent to the penalty box");
-    }
-
-    private static void handlePlayerMoved(PlayerMoved playerMoved) {
-        System.out.println(playerMoved.name
-                + "'s new location is "
-                + playerMoved.newLocation);
-        System.out.println("The category is " + currentCategory(playerMoved.newLocation));
-    }
-
-    private static void handleQuestionAsked(QuestionAsked questionAsked) {
-        System.out.println(questionAsked.question);
     }
 
     private static String currentCategory(int location) {
