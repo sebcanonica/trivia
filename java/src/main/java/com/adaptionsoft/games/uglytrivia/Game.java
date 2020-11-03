@@ -1,5 +1,12 @@
 package com.adaptionsoft.games.uglytrivia;
 
+/** TODO
+ *  - finir refacto NotAWinner
+ *  - notion d'aggrégat (1 pour Game)
+ *  - chargement d'état du Game pour tests unitaires plus simples
+ *    (séparation calcul des évenements et changement d'état)
+ */
+
 import com.adaptionsoft.games.trivia.PlayerWon;
 
 import java.util.ArrayList;
