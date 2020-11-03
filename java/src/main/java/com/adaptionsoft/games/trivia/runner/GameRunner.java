@@ -20,20 +20,24 @@ public class GameRunner {
     }
 
     public static void playGame(Random rand) {
-		Game aGame = new Game(createDeck(), new EventPublisher());
+		EventPublisher eventPublisher = new EventPublisher();
+		Game aGame = new Game(createDeck(), eventPublisher);
 
-		aGame.add("Chet");
-		aGame.add("Pat");
-		aGame.add("Sue");
+		eventPublisher.applyEvents(aGame.add("Chet"));
+		eventPublisher.applyEvents(aGame.add("Pat"));
+		eventPublisher.applyEvents(aGame.add("Sue"));
 
 		do {
 
-			aGame.roll(rand.nextInt(5) + 1);
+			eventPublisher.applyEvents(aGame.roll(rand.nextInt(5) + 1));
 
 			if (rand.nextInt(9) == 7) {
-				notAWinner = aGame.wrongAnswer();
+				notAWinner = true;
+				eventPublisher.applyEvents(aGame.wrongAnswer());
 			} else {
-				notAWinner = aGame.wasCorrectlyAnswered();
+				Game.EventsAndNotAWinner eventsAndNotAWinner = aGame.wasCorrectlyAnswered();
+				eventPublisher.applyEvents(eventsAndNotAWinner.getEvents());
+				notAWinner = eventsAndNotAWinner.isNotAWinner();
 			}
 
 

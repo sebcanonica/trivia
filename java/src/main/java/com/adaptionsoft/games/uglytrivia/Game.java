@@ -21,18 +21,17 @@ public class Game {
         return (howManyPlayers() >= 2);
     }
 
-    public boolean add(String playerName) {
+    public List<Object> add(String playerName) {
         players.add(new Player(playerName));
 
-        eventPublisher.applyEvents(Arrays.asList(new PlayerAdded(playerName, players.size())));
-        return true;
+        return Arrays.asList(new PlayerAdded(playerName, players.size()));
     }
 
     public int howManyPlayers() {
         return players.size();
     }
 
-    public void roll(int roll) {
+    public List<Object> roll(int roll) {
         List<Object> events = new ArrayList<>();
         events.add(new DiceRolled(players.get(currentPlayer).getName(), roll));
 
@@ -49,7 +48,7 @@ public class Game {
             events.addAll(movePlayer(roll));
         }
 
-        eventPublisher.applyEvents(events);
+        return events;
     }
 
     private List<Object> movePlayer(int roll) {
@@ -66,32 +65,26 @@ public class Game {
         return "Rock";
     }
 
-    public boolean wasCorrectlyAnswered() {
+    public EventsAndNotAWinner wasCorrectlyAnswered() {
         List<Object> events = new ArrayList<>();
-        boolean notAWinner = true;
         if (players.get(currentPlayer).isInPenaltyBox()) {
             if (isGettingOutOfPenaltyBox) {
                 events.add(players.get(currentPlayer).winGoldCoin());
-
-                notAWinner = didPlayerWin();
             }
         } else {
             events.add(players.get(currentPlayer).winGoldCoin());
-
-            notAWinner = didPlayerWin();
         }
+        boolean notAWinner = didPlayerWin();
 
         nextPlayer();
-        eventPublisher.applyEvents(events);
-        return notAWinner;
+        return new EventsAndNotAWinner(events,notAWinner);
     }
 
-    public boolean wrongAnswer() {
+    public List<Object> wrongAnswer() {
         PlayerSentToPenaltyBox playerSentToPenaltyBox = players.get(currentPlayer).goToPenaltyBox();
         nextPlayer();
 
-        eventPublisher.applyEvents(Arrays.asList(playerSentToPenaltyBox));
-        return true;
+        return Arrays.asList(playerSentToPenaltyBox);
     }
 
     private void nextPlayer() {
@@ -102,5 +95,23 @@ public class Game {
 
     private boolean didPlayerWin() {
         return !players.get(currentPlayer).hasWon();
+    }
+
+    public class EventsAndNotAWinner {
+        private List<Object> events;
+        private boolean notAWinner;
+
+        public EventsAndNotAWinner(List<Object> events, boolean notAWinner) {
+            this.events = events;
+            this.notAWinner = notAWinner;
+        }
+
+        public boolean isNotAWinner() {
+            return notAWinner;
+        }
+
+        public List<Object> getEvents() {
+            return events;
+        }
     }
 }
