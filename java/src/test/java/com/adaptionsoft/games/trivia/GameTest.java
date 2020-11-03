@@ -1,14 +1,18 @@
 package com.adaptionsoft.games.trivia;
 
-import static org.junit.Assert.*;
-
 import com.adaptionsoft.games.trivia.runner.GameRunner;
+import com.adaptionsoft.games.uglytrivia.Deck;
+import com.adaptionsoft.games.uglytrivia.EventPublisher;
+import com.adaptionsoft.games.uglytrivia.Game;
 import org.approvaltests.Approvals;
 import org.junit.Test;
 
 import java.io.*;
 import java.util.Random;
 import java.util.stream.IntStream;
+
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class GameTest {
 
@@ -21,5 +25,17 @@ public class GameTest {
         IntStream.range(1,15).forEach(i -> GameRunner.playGame(randomizer));
 
         Approvals.verify(resultStream.toString());
+    }
+
+    @Test
+    public void playerWonEventRaisedWhenGameEnded() {
+        Game aGame = new Game(new Deck(), new EventPublisher());
+        aGame.add("toto");
+        Game.EventsAndNotAWinner eventsAndNotAWinner = null;
+        for (int i =0; i<6;i++){
+            aGame.roll(1);
+            eventsAndNotAWinner = aGame.wasCorrectlyAnswered();
+        }
+        assertTrue(eventsAndNotAWinner.getEvents().contains(new PlayerWon("toto")));
     }
 }

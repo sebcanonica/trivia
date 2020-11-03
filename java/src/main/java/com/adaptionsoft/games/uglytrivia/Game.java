@@ -1,5 +1,7 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import com.adaptionsoft.games.trivia.PlayerWon;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,6 +77,9 @@ public class Game {
             events.add(players.get(currentPlayer).winGoldCoin());
         }
         boolean notAWinner = didPlayerWin();
+        if (!notAWinner) {
+            events.add(new PlayerWon(players.get(currentPlayer).getName()));
+        }
 
         nextPlayer();
         return new EventsAndNotAWinner(events,notAWinner);
