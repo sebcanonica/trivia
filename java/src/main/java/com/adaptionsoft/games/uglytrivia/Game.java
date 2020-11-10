@@ -1,10 +1,14 @@
 package com.adaptionsoft.games.uglytrivia;
 
 /** TODO
- *  - finir refacto NotAWinner
  *  - notion d'aggrégat (1 pour Game)
  *  - chargement d'état du Game pour tests unitaires plus simples
  *    (séparation calcul des évenements et changement d'état)
+ *  - passer Game en immutable
+ *
+ *  - Poure 24/11
+ *  - Ajouter notion d'aggregats (non event sourcé)
+ *  - Voir comment initialiser le Game avec un état donné
  */
 
 import com.adaptionsoft.games.trivia.PlayerWon;
