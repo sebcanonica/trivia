@@ -8,6 +8,7 @@ import org.approvaltests.Approvals;
 import org.junit.Test;
 
 import java.io.*;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -29,13 +30,13 @@ public class GameTest {
 
     @Test
     public void playerWonEventRaisedWhenGameEnded() {
-        Game aGame = new Game(new Deck(), new EventPublisher());
+        Game aGame = new Game(new Deck());
         aGame.add("toto");
-        Game.EventsAndNotAWinner eventsAndNotAWinner = null;
+        List<Object> events = null;
         for (int i =0; i<6;i++){
             aGame.roll(1);
-            eventsAndNotAWinner = aGame.wasCorrectlyAnswered();
+            events = aGame.wasCorrectlyAnswered();
         }
-        assertTrue(eventsAndNotAWinner.getEvents().contains(new PlayerWon("toto")));
+        assertTrue(events.contains(new PlayerWon("toto")));
     }
 }

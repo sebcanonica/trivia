@@ -14,16 +14,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Game {
-    private final IPublishEvent eventPublisher;
     List<Player> players = new ArrayList<>();
 	private final Deck deck;
 
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
-    public Game(Deck deck, IPublishEvent eventPublisher) {
+    public Game(Deck deck) {
         this.deck = deck;
-        this.eventPublisher = eventPublisher;
     }
 
     public boolean isPlayable() {
@@ -74,7 +72,7 @@ public class Game {
         return "Rock";
     }
 
-    public EventsAndNotAWinner wasCorrectlyAnswered() {
+    public List<Object> wasCorrectlyAnswered() {
         List<Object> events = new ArrayList<>();
         if (players.get(currentPlayer).isInPenaltyBox()) {
             if (isGettingOutOfPenaltyBox) {
@@ -89,7 +87,7 @@ public class Game {
         }
 
         nextPlayer();
-        return new EventsAndNotAWinner(events,notAWinner);
+        return events;
     }
 
     public List<Object> wrongAnswer() {
@@ -109,21 +107,4 @@ public class Game {
         return !players.get(currentPlayer).hasWon();
     }
 
-    public class EventsAndNotAWinner {
-        private List<Object> events;
-        private boolean notAWinner;
-
-        public EventsAndNotAWinner(List<Object> events, boolean notAWinner) {
-            this.events = events;
-            this.notAWinner = notAWinner;
-        }
-
-        public boolean isNotAWinner() {
-            return notAWinner;
-        }
-
-        public List<Object> getEvents() {
-            return events;
-        }
-    }
 }
