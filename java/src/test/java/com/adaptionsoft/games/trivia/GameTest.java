@@ -3,17 +3,16 @@ package com.adaptionsoft.games.trivia;
 import com.adaptionsoft.games.trivia.runner.GameRunner;
 import com.adaptionsoft.games.uglytrivia.*;
 import org.approvaltests.Approvals;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class GameTest {
@@ -32,7 +31,7 @@ public class GameTest {
     @Test
     public void playerWonEventRaisedWhenGameEnded() {
         List<Player> players = Arrays.asList(
-                new Player("toto", 5)
+                new Player("toto", 5, 0)
         );
         Game aGame = new Game(new Deck(), players, 0);
         aGame.roll(1);
@@ -47,7 +46,7 @@ public class GameTest {
         );
         Game aGame = new Game(new Deck(), players, 0);
         List<Object> events = aGame.roll(1);
-        Assertions.assertThat(events).containsExactly(
+        assertThat(events).containsExactly(
                 new DiceRolled("toto", 1),
                 new PlayerMoved(1, "toto"),
                 new QuestionAsked("Science", "Science Question 0")
@@ -62,10 +61,24 @@ public class GameTest {
         );
         Game aGame = new Game(new Deck(), players, 1);
         List<Object> events = aGame.roll(1);
-        Assertions.assertThat(events).containsExactly(
+        assertThat(events).containsExactly(
                 new DiceRolled("tata", 1),
                 new PlayerMoved(1, "tata"),
                 new QuestionAsked("Science", "Science Question 0")
+        );
+    }
+
+    @Test
+    public void player_should_have_place_injected() {
+        List<Player> players = Arrays.asList(
+                new Player("toto", 0, 1)
+        );
+        Game aGame = new Game(new Deck(), players, 0);
+        List<Object> events = aGame.roll(1);
+        assertThat(events).containsExactly(
+                new DiceRolled("toto", 1),
+                new PlayerMoved(2, "toto"),
+                new QuestionAsked("Sports", "Sports Question 0")
         );
     }
 }
