@@ -5,10 +5,16 @@ package com.adaptionsoft.games.uglytrivia;
  *  - chargement d'état du Game pour tests unitaires plus simples
  *    (séparation calcul des évenements et changement d'état)
  *  - passer Game en immutable
+ *  - explorer solution avec plusieurs aggregat
+ *  - voir comment gérer la démultiplication des tests (xavier)
  *
- *  - Poure 24/11
+ *  - Pour le 24/11
  *  - Ajouter notion d'aggregats (non event sourcé)
  *  - Voir comment initialiser le Game avec un état donné
+ *
+ *  - Pour le XX/12
+ *  - Finaliser l'aggregat game
+ *
  */
 
 import com.adaptionsoft.games.trivia.PlayerWon;
