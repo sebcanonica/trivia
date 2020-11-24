@@ -18,14 +18,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Game {
-    List<Player> players = new ArrayList<>();
+    final List<Player> players;
 	private final Deck deck;
 
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
-    public Game(Deck deck) {
+    public Game(Deck deck, List<Player> players, int currentPlayer) {
         this.deck = deck;
+        this.players = players;
+        this.currentPlayer = currentPlayer;
     }
 
     public boolean isPlayable() {
