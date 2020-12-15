@@ -7,13 +7,14 @@ public class Player {
     private boolean isInPenaltyBox = false;
 
     public Player(String playerName) {
-        this(playerName, 0, 0);
+        this(playerName, 0, 0, false);
     }
 
-    public Player(String playerName, int goldCoins, int place) {
+    public Player(String playerName, int goldCoins, int place, boolean isInPenaltyBox) {
         name = playerName;
         this.goldCoins = goldCoins;
         this.place = place;
+        this.isInPenaltyBox = isInPenaltyBox;
     }
 
     public String getName() {

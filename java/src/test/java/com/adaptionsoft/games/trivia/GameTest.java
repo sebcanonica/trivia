@@ -31,7 +31,7 @@ public class GameTest {
     @Test
     public void playerWonEventRaisedWhenGameEnded() {
         List<Player> players = Arrays.asList(
-                new Player("toto", 5, 0)
+                new Player("toto", 5, 0, false)
         );
         Game aGame = new Game(new Deck(), players, 0);
         aGame.roll(1);
@@ -71,7 +71,7 @@ public class GameTest {
     @Test
     public void player_should_have_place_injected() {
         List<Player> players = Arrays.asList(
-                new Player("toto", 0, 1)
+                new Player("toto", 0, 1, false)
         );
         Game aGame = new Game(new Deck(), players, 0);
         List<Object> events = aGame.roll(1);
@@ -80,5 +80,19 @@ public class GameTest {
                 new PlayerMoved(2, "toto"),
                 new QuestionAsked("Sports", "Sports Question 0")
         );
+    }
+
+    @Test
+    public void player_should_not_move_when_in_penalty_box_and_rolling_an_even_number() {
+        List<Player> players = Arrays.asList(
+                new Player("toto", 0, 1, true)
+        );
+        Game aGame = new Game(new Deck(), players, 0);
+
+        List<Object> events = aGame.roll(2);
+
+        assertThat(events).containsExactly(
+                new DiceRolled("toto", 2),
+                new NotGettingOutOfPenaltyBox("toto"));
     }
 }
