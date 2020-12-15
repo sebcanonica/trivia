@@ -23,7 +23,7 @@ public class GameRunner {
     public static void playGame(Random rand) {
 		List<Object> events = new ArrayList<>();
 		EventPublisher eventPublisher = new EventPublisher();
-		Game aGame = new Game(createDeck(), new ArrayList<>(), 0);
+		Game aGame = new Game(createDeck(), new ArrayList<>(), 0, false);
 
 		events.addAll(aGame.add("Chet"));
 		events.addAll(aGame.add("Pat"));

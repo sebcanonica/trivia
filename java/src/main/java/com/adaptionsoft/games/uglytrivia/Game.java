@@ -30,10 +30,11 @@ public class Game {
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
-    public Game(Deck deck, List<Player> players, int currentPlayer) {
+    public Game(Deck deck, List<Player> players, int currentPlayer, boolean isGettingOutOfPenaltyBox) {
         this.deck = deck;
         this.players = players;
         this.currentPlayer = currentPlayer;
+        this.isGettingOutOfPenaltyBox = isGettingOutOfPenaltyBox;
     }
 
     public boolean isPlayable() {
