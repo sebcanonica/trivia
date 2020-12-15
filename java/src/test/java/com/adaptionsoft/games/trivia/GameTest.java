@@ -95,4 +95,20 @@ public class GameTest {
                 new DiceRolled("toto", 2),
                 new NotGettingOutOfPenaltyBox("toto"));
     }
+
+    @Test
+    public void player_should_move_when_in_penalty_box_and_rolling_an_odd_number() {
+        List<Player> players = Arrays.asList(
+                new Player("toto", 0, 1, true)
+        );
+        Game aGame = new Game(new Deck(), players, 0);
+
+        List<Object> events = aGame.roll(3);
+
+        assertThat(events).containsExactly(
+                new DiceRolled("toto", 3),
+                new GetOutOfPenaltyBox("toto"),
+                new PlayerMoved(4, "toto"),
+                new QuestionAsked("Pop", "Pop Question 0"));
+    }
 }
