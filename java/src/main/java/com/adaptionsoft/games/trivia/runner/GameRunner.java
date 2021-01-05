@@ -8,6 +8,7 @@ import com.adaptionsoft.games.trivia.PlayerWon;
 import com.adaptionsoft.games.uglytrivia.Deck;
 import com.adaptionsoft.games.uglytrivia.EventPublisher;
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.PlayerAdded;
 
 
 public class GameRunner {
@@ -25,7 +26,10 @@ public class GameRunner {
 
 		Game aGame = new Game(createDeck(), new ArrayList<>(), 0, false);
 		GameRepository gameRepository = new InMemoryGameRepository(aGame);
-        setupGame(eventPublisher, gameRepository);
+		//TODO faire le TODO dans EventPublisher
+		//eventPublisher.registerHandler(PlayerAdded.class, gameRepository::save);
+
+		setupGame(eventPublisher, gameRepository);
 
 		List<Object> events;
         do {
