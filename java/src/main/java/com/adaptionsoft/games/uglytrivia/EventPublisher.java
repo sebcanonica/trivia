@@ -1,17 +1,17 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class EventPublisher implements IPublishEvent {
 
-    //TODO remplacer Consumer par List<Consumer> pour gérer plusieurs conumers par type d'evt
-    // TODO écrire un test pour vérifier que l'event publisher
-    private HashMap<Class, Consumer> handlers;
+    private HashMap<Class, List<Consumer>> handlers;
 
     public EventPublisher() {
-        handlers = new HashMap<Class, Consumer>();
+        handlers = new HashMap<>();
         registerHandler(PlayerMoved.class, GameHandler::handlePlayerMoved);
         registerHandler(QuestionAsked.class, GameHandler::handleQuestionAsked);
         registerHandler(PlayerSentToPenaltyBox.class, GameHandler::handlePlayerSentToPenaltyBox);
@@ -25,13 +25,15 @@ public class EventPublisher implements IPublishEvent {
     @Override
     public void applyEvents(List<Object> events) {
         for (Object event : events) {
-            Consumer handler = handlers.getOrDefault(event.getClass(), o -> {
-            });
-            handler.accept(event);
+            List<Consumer> handlers = this.handlers.getOrDefault(event.getClass(), Collections.emptyList());
+            for (Consumer handler : handlers) {
+                handler.accept(event);
+            }
         }
     }
 
     public <T> void registerHandler(Class<T> clazz, Consumer<T> handler) {
-        handlers.put(clazz, handler);
+        List<Consumer> consumerList = handlers.computeIfAbsent(clazz, k -> new ArrayList<>());
+        consumerList.add(handler);
     }
 }

@@ -26,8 +26,7 @@ public class GameRunner {
 
 		Game aGame = new Game(createDeck(), new ArrayList<>(), 0, false);
 		GameRepository gameRepository = new InMemoryGameRepository(aGame);
-		//TODO faire le TODO dans EventPublisher
-		//eventPublisher.registerHandler(PlayerAdded.class, gameRepository::save);
+		eventPublisher.registerHandler(PlayerAdded.class, gameRepository::save);
 
 		setupGame(eventPublisher, gameRepository);
 
