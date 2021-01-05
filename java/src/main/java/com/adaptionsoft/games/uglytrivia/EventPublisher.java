@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 public class EventPublisher implements IPublishEvent {
 
     //TODO remplacer Consumer par List<Consumer> pour gérer plusieurs conumers par type d'evt
+    // TODO écrire un test pour vérifier que l'event publisher
     private HashMap<Class, Consumer> handlers;
 
     public EventPublisher() {

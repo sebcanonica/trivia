@@ -18,6 +18,9 @@ package com.adaptionsoft.games.uglytrivia;
  *  - Pour le 05/01
  *  - Créer un repository pour fournir l'aggregat
  *
+ *  - Pour le 05/01
+ *  - Créer un repository pour fournir l'aggregat
+ *
  */
 
 import com.adaptionsoft.games.trivia.PlayerWon;
