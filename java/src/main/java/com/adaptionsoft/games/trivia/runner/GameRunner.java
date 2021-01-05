@@ -21,24 +21,39 @@ public class GameRunner {
     }
 
     public static void playGame(Random rand) {
-		List<Object> events = new ArrayList<>();
 		EventPublisher eventPublisher = new EventPublisher();
+
 		Game aGame = new Game(createDeck(), new ArrayList<>(), 0, false);
+		GameRepository gameRepository = new InMemoryGameRepository(aGame);
+        setupGame(eventPublisher, gameRepository);
 
-		events.addAll(aGame.add("Chet"));
-		events.addAll(aGame.add("Pat"));
-		events.addAll(aGame.add("Sue"));
+		List<Object> events;
+        do {
+			events = playTurn(rand, eventPublisher, gameRepository);
+        } while (events.stream().noneMatch(event -> event instanceof PlayerWon));
 
-		do {
-			events.addAll(aGame.roll(rand.nextInt(5) + 1));
-
-			if (rand.nextInt(9) == 7) {
-				events.addAll(aGame.wrongAnswer());
-			} else {
-				events.addAll(aGame.wasCorrectlyAnswered());
-			}
-		} while (events.stream().noneMatch(event -> event instanceof PlayerWon));
-
-		eventPublisher.applyEvents(events);
 	}
+
+    private static void setupGame(EventPublisher eventPublisher, GameRepository gameRepository) {
+		Game aGame = gameRepository.getGame();
+		List<Object> events = new ArrayList<>();
+        events.addAll(aGame.add("Chet"));
+        events.addAll(aGame.add("Pat"));
+        events.addAll(aGame.add("Sue"));
+        eventPublisher.applyEvents(events);
+    }
+
+    private static List<Object> playTurn(Random rand, EventPublisher eventPublisher, GameRepository gameRepository) {
+        Game aGame = gameRepository.getGame();
+        List<Object> events = new ArrayList<>();
+        events.addAll(aGame.roll(rand.nextInt(5) + 1));
+
+        if (rand.nextInt(9) == 7) {
+            events.addAll(aGame.wrongAnswer());
+        } else {
+            events.addAll(aGame.wasCorrectlyAnswered());
+        }
+        eventPublisher.applyEvents(events);
+        return events;
+    }
 }

@@ -12,8 +12,11 @@ package com.adaptionsoft.games.uglytrivia;
  *  - Ajouter notion d'aggregats (non event sourcé)
  *  - Voir comment initialiser le Game avec un état donné
  *
- *  - Pour le XX/12
+ *  - Pour le 15/12
  *  - Finaliser l'aggregat game
+ *
+ *  - Pour le 05/01
+ *  - Créer un repository pour fournir l'aggregat
  *
  */
 
