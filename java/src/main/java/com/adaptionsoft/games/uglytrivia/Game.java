@@ -12,15 +12,11 @@ package com.adaptionsoft.games.uglytrivia;
  *  - Ajouter notion d'aggregats (non event sourcé)
  *  - Voir comment initialiser le Game avec un état donné
  *
- *  - Pour le 15/12
- *  - Finaliser l'aggregat game
- *
- *  - Pour le 05/01
- *  - Créer un repository pour fournir l'aggregat
- *
- *  - Pour le 19/01
- *  - Suite création du repository pour fournir l'aggregat
- *
+ *  - Pour le 02/02
+ *  - Ne stocker que des DTOs dans InMemoryGameRepository
+ *  - Pour petits pas
+ *      - entité par entité
+ *      - ouverture large des accesseurs
  */
 
 import com.adaptionsoft.games.trivia.PlayerWon;
