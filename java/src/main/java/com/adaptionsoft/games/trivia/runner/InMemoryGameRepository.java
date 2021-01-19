@@ -1,10 +1,12 @@
 package com.adaptionsoft.games.trivia.runner;
 
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.Player;
 import com.adaptionsoft.games.uglytrivia.PlayerAdded;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InMemoryGameRepository implements GameRepository {
     private Game aGame;
@@ -16,8 +18,9 @@ public class InMemoryGameRepository implements GameRepository {
 
     @Override
     public Game getGame() {
-        //TODO générer une instance de Game au lieu d'utiliser le field
-        return aGame;
+         List<Player> players =aGame.getPlayers();
+         aGame = new Game(players, aGame);
+         return aGame;
     }
 
     @Override

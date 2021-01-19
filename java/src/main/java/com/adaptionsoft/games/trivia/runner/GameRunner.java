@@ -29,7 +29,7 @@ public class GameRunner {
 		eventPublisher.registerHandler(PlayerAdded.class, gameRepository::save);
 
 		setupGame(eventPublisher, gameRepository);
-
+// ici on pourrait appeler gamerepository
 		List<Object> events;
         do {
 			events = playTurn(rand, eventPublisher, gameRepository);

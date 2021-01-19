@@ -28,6 +28,7 @@ import com.adaptionsoft.games.trivia.PlayerWon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Game {
     final List<Player> players;
@@ -41,6 +42,14 @@ public class Game {
         this.players = players;
         this.currentPlayer = currentPlayer;
         this.isGettingOutOfPenaltyBox = isGettingOutOfPenaltyBox;
+    }
+
+    public Game(List<Player> players, Game aGame) {
+        this(aGame.deck, players, aGame.currentPlayer, aGame.isGettingOutOfPenaltyBox);
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public boolean isPlayable() {
