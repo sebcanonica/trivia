@@ -18,8 +18,8 @@ package com.adaptionsoft.games.uglytrivia;
  *  - Pour le 05/01
  *  - Créer un repository pour fournir l'aggregat
  *
- *  - Pour le 05/01
- *  - Créer un repository pour fournir l'aggregat
+ *  - Pour le 19/01
+ *  - Suite création du repository pour fournir l'aggregat
  *
  */
 
