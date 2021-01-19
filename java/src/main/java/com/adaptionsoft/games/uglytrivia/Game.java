@@ -57,9 +57,7 @@ public class Game {
     }
 
     public List<Object> add(String playerName) {
-        players.add(new Player(playerName));
-
-        return Arrays.asList(new PlayerAdded(playerName, players.size()));
+        return Arrays.asList(new PlayerAdded(playerName, players.size() +1));
     }
 
     public int howManyPlayers() {

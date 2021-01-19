@@ -38,12 +38,9 @@ public class GameRunner {
 	}
 
     private static void setupGame(EventPublisher eventPublisher, GameRepository gameRepository) {
-		Game aGame = gameRepository.getGame();
-		List<Object> events = new ArrayList<>();
-        events.addAll(aGame.add("Chet"));
-        events.addAll(aGame.add("Pat"));
-        events.addAll(aGame.add("Sue"));
-        eventPublisher.applyEvents(events);
+        eventPublisher.applyEvents(gameRepository.getGame().add("Chet"));
+        eventPublisher.applyEvents(gameRepository.getGame().add("Pat"));
+        eventPublisher.applyEvents(gameRepository.getGame().add("Sue"));
     }
 
     private static List<Object> playTurn(Random rand, EventPublisher eventPublisher, GameRepository gameRepository) {

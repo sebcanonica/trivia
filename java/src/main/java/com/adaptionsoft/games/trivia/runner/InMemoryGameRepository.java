@@ -6,11 +6,10 @@ import com.adaptionsoft.games.uglytrivia.PlayerAdded;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class InMemoryGameRepository implements GameRepository {
     private Game aGame;
-    private List<String> players = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
 
     public InMemoryGameRepository(Game aGame) {
         this.aGame = aGame;
@@ -18,14 +17,13 @@ public class InMemoryGameRepository implements GameRepository {
 
     @Override
     public Game getGame() {
-         List<Player> players =aGame.getPlayers();
-         aGame = new Game(players, aGame);
+         aGame = new Game(this.players, aGame);
          return aGame;
     }
 
     @Override
     public void save(PlayerAdded playerAddedEvent) {
         // insert the player into players table
-        players.add(playerAddedEvent.playerName);
+        players.add(new Player(playerAddedEvent.playerName));
     }
 }
