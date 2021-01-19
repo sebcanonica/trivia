@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.runner;
 
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.GoldCoinWon;
 import com.adaptionsoft.games.uglytrivia.Player;
 import com.adaptionsoft.games.uglytrivia.PlayerAdded;
 
@@ -25,5 +26,13 @@ public class InMemoryGameRepository implements GameRepository {
     public void save(PlayerAdded playerAddedEvent) {
         // insert the player into players table
         players.add(new Player(playerAddedEvent.playerName));
+    }
+
+    @Override
+    public void save(GoldCoinWon goldCoinWonEvent) {
+        Player player = players.stream()
+                .filter(p -> p.getName() == goldCoinWonEvent.name)
+                .findFirst().get();
+        player.goldCoins = goldCoinWonEvent.goldCoinsTotal;
     }
 }

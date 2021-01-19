@@ -3,7 +3,7 @@ package com.adaptionsoft.games.uglytrivia;
 public class Player {
     private String name;
     private int place = 0;
-    private int goldCoins = 0;
+    public int goldCoins = 0;
     private boolean isInPenaltyBox = false;
 
     public Player(String playerName) {
