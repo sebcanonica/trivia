@@ -21,7 +21,7 @@ public class GameRunner {
     public static void playGame(Random rand) {
 		EventPublisher eventPublisher = new EventPublisher();
 
-		Game aGame = new Game(createDeck(), new ArrayList<>(), 0, false);
+		Game aGame = new Game(createDeck(), new ArrayList<>(), 0);
 		GameRepository gameRepository = new InMemoryGameRepository(aGame);
         eventPublisher.registerHandler(PlayerAdded.class, gameRepository::save);
         eventPublisher.registerHandler(GoldCoinWon.class, gameRepository::save);

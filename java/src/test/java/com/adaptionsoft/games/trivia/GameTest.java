@@ -33,7 +33,7 @@ public class GameTest {
         List<Player> players = Arrays.asList(
                 new Player("toto", 5, 0, false)
         );
-        Game aGame = new Game(new Deck(), players, 0, false);
+        Game aGame = new Game(new Deck(), players, 0);
         aGame.roll(1);
         List<Object> events = aGame.wasCorrectlyAnswered();
         assertTrue(events.contains(new PlayerWon("toto")));
@@ -44,7 +44,7 @@ public class GameTest {
         List<Player> players = Arrays.asList(
                 new Player("toto")
         );
-        Game aGame = new Game(new Deck(), players, 0, false);
+        Game aGame = new Game(new Deck(), players, 0);
         List<Object> events = aGame.roll(1);
         assertThat(events).containsExactly(
                 new DiceRolled("toto", 1),
@@ -59,7 +59,7 @@ public class GameTest {
                 new Player("toto"),
                 new Player("tata")
         );
-        Game aGame = new Game(new Deck(), players, 1, false);
+        Game aGame = new Game(new Deck(), players, 1);
         List<Object> events = aGame.roll(1);
         assertThat(events).containsExactly(
                 new DiceRolled("tata", 1),
@@ -73,7 +73,7 @@ public class GameTest {
         List<Player> players = Arrays.asList(
                 new Player("toto", 0, 1, false)
         );
-        Game aGame = new Game(new Deck(), players, 0, false);
+        Game aGame = new Game(new Deck(), players, 0);
         List<Object> events = aGame.roll(1);
         assertThat(events).containsExactly(
                 new DiceRolled("toto", 1),
@@ -87,7 +87,7 @@ public class GameTest {
         List<Player> players = Arrays.asList(
                 new Player("toto", 0, 1, true)
         );
-        Game aGame = new Game(new Deck(), players, 0, false);
+        Game aGame = new Game(new Deck(), players, 0);
 
         List<Object> events = aGame.roll(2);
 
@@ -101,7 +101,7 @@ public class GameTest {
         List<Player> players = Arrays.asList(
                 new Player("toto", 0, 1, true)
         );
-        Game aGame = new Game(new Deck(), players, 0, false);
+        Game aGame = new Game(new Deck(), players, 0);
 
         List<Object> events = aGame.roll(3);
 

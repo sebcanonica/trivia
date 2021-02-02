@@ -30,17 +30,21 @@ public class Game {
 	private final Deck deck;
 
     int currentPlayer = 0;
-    boolean isGettingOutOfPenaltyBox;
+    boolean isGettingOutOfPenaltyBox = false;
 
-    public Game(Deck deck, List<Player> players, int currentPlayer, boolean isGettingOutOfPenaltyBox) {
+    public Game(Deck deck, List<Player> players, int currentPlayer) {
         this.deck = deck;
         this.players = players;
         this.currentPlayer = currentPlayer;
-        this.isGettingOutOfPenaltyBox = isGettingOutOfPenaltyBox;
     }
 
     public Game(List<Player> players, Game aGame, int currentPlayer) {
-        this(aGame.deck, players, currentPlayer, aGame.isGettingOutOfPenaltyBox);
+        this(aGame.deck, players, currentPlayer);
+    }
+
+    public Game(Deck deck, List<Player> players, int currentPlayer, boolean isGettingOutOfPenaltyBox) {
+        this(deck, players, currentPlayer);
+        this.isGettingOutOfPenaltyBox = isGettingOutOfPenaltyBox;
     }
 
     public List<Player> getPlayers() {
