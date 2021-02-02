@@ -17,6 +17,13 @@ package com.adaptionsoft.games.uglytrivia;
  *  - Pour petits pas
  *      - entité par entité
  *      - ouverture large des accesseurs
+ *
+ *  - Pour le 16/02
+ *  - Créer un DTO pour le Deck
+ *  - clarifier la notion d'aggrégat
+ *  - basculer sur de l'event-sourcing
+ *  - rendre le cœur immutable ?
+ *
  */
 
 import com.adaptionsoft.games.trivia.PlayerWon;
