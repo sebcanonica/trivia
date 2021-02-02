@@ -39,8 +39,8 @@ public class Game {
         this.isGettingOutOfPenaltyBox = isGettingOutOfPenaltyBox;
     }
 
-    public Game(List<Player> players, Game aGame) {
-        this(aGame.deck, players, aGame.currentPlayer, aGame.isGettingOutOfPenaltyBox);
+    public Game(List<Player> players, Game aGame, int currentPlayer) {
+        this(aGame.deck, players, currentPlayer, aGame.isGettingOutOfPenaltyBox);
     }
 
     public List<Player> getPlayers() {
@@ -107,21 +107,20 @@ public class Game {
             events.add(new PlayerWon(players.get(currentPlayer).getName()));
         }
 
-        nextPlayer();
+        events.add(nextPlayer());
         return events;
     }
 
     public List<Object> wrongAnswer() {
         PlayerSentToPenaltyBox playerSentToPenaltyBox = players.get(currentPlayer).goToPenaltyBox();
-        nextPlayer();
-
-        return Arrays.asList(playerSentToPenaltyBox);
+        CurrentPlayerChanged currentPlayerChanged = nextPlayer();
+        return Arrays.asList(playerSentToPenaltyBox, currentPlayerChanged);
     }
 
-    private void nextPlayer() {
+    private CurrentPlayerChanged nextPlayer() {
         currentPlayer++;
-        if (currentPlayer == players
-                .size()) currentPlayer = 0;
+        if (currentPlayer == players.size()) currentPlayer = 0;
+        return new CurrentPlayerChanged(currentPlayer);
     }
 
     private boolean didPlayerWin() {

@@ -27,6 +27,7 @@ public class GameRunner {
         eventPublisher.registerHandler(GoldCoinWon.class, gameRepository::save);
         eventPublisher.registerHandler(PlayerMoved.class, gameRepository::save);
         eventPublisher.registerHandler(PlayerSentToPenaltyBox.class, gameRepository::save);
+        eventPublisher.registerHandler(CurrentPlayerChanged.class, gameRepository::save);
 
 		setupGame(eventPublisher, gameRepository);
 // ici on pourrait appeler gamerepository

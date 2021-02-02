@@ -123,7 +123,8 @@ public class GameTest {
         List<Object> events = aGame.wasCorrectlyAnswered();
 
         assertThat(events).containsExactly(
-                new GoldCoinWon("toto", 1)
+                new GoldCoinWon("toto", 1),
+                new CurrentPlayerChanged(0)
         );
     }
 

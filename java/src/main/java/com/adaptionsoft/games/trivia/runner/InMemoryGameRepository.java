@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class InMemoryGameRepository implements GameRepository {
     private Game aGame;
     private List<PlayerDTO> playerDTO = new ArrayList<>();
+    private GameDTO gameDTO = new GameDTO();
 
     public InMemoryGameRepository(Game aGame) {
         this.aGame = aGame;
@@ -20,7 +21,7 @@ public class InMemoryGameRepository implements GameRepository {
          List<Player> players = this.playerDTO.stream()
                  .map(pd -> new Player(pd.playerName, pd.goldCoins, pd.place, pd.isInPenaltyBox))
                  .collect(Collectors.toList());
-         aGame = new Game(players, aGame);
+         aGame = new Game(players, aGame, gameDTO.currentPlayer);
          return aGame;
     }
 
@@ -51,5 +52,10 @@ public class InMemoryGameRepository implements GameRepository {
                 .filter(p -> p.playerName == playerSentToPenaltyBoxEvent.name)
                 .findFirst().get();
         playerDTO.isInPenaltyBox = true;
+    }
+
+    @Override
+    public void save(CurrentPlayerChanged currentPlayerChanged) {
+        gameDTO.currentPlayer = currentPlayerChanged.currentPlayer;
     }
 }

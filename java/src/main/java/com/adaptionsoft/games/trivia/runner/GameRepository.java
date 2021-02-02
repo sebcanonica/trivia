@@ -11,4 +11,6 @@ public interface GameRepository {
     void save(PlayerMoved playerMovedEvent);
 
     void save(PlayerSentToPenaltyBox playerSentToPenaltyBoxEvent);
+
+    void save(CurrentPlayerChanged currentPlayerChanged);
 }
