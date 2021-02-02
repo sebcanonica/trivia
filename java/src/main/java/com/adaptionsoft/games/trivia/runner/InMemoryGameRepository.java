@@ -1,16 +1,14 @@
 package com.adaptionsoft.games.trivia.runner;
 
-import com.adaptionsoft.games.uglytrivia.Game;
-import com.adaptionsoft.games.uglytrivia.GoldCoinWon;
-import com.adaptionsoft.games.uglytrivia.Player;
-import com.adaptionsoft.games.uglytrivia.PlayerAdded;
+import com.adaptionsoft.games.uglytrivia.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InMemoryGameRepository implements GameRepository {
     private Game aGame;
-    private List<Player> players = new ArrayList<>();
+    private List<PlayerDTO> playerDTO = new ArrayList<>();
 
     public InMemoryGameRepository(Game aGame) {
         this.aGame = aGame;
@@ -18,21 +16,40 @@ public class InMemoryGameRepository implements GameRepository {
 
     @Override
     public Game getGame() {
-         aGame = new Game(this.players, aGame);
+         // create Players from PlayerDTO
+         List<Player> players = this.playerDTO.stream()
+                 .map(pd -> new Player(pd.playerName, pd.goldCoins, pd.place, pd.isInPenaltyBox))
+                 .collect(Collectors.toList());
+         aGame = new Game(players, aGame);
          return aGame;
     }
 
     @Override
     public void save(PlayerAdded playerAddedEvent) {
-        // insert the player into players table
-        players.add(new Player(playerAddedEvent.playerName));
+        playerDTO.add(new PlayerDTO(playerAddedEvent.playerName));
     }
 
     @Override
     public void save(GoldCoinWon goldCoinWonEvent) {
-        Player player = players.stream()
-                .filter(p -> p.getName() == goldCoinWonEvent.name)
+        PlayerDTO playerDTO = this.playerDTO.stream()
+                .filter(p -> p.playerName == goldCoinWonEvent.name)
                 .findFirst().get();
-        player.goldCoins = goldCoinWonEvent.goldCoinsTotal;
+        playerDTO.goldCoins = goldCoinWonEvent.goldCoinsTotal;
+    }
+
+    @Override
+    public void save(PlayerMoved playerMovedEvent) {
+        PlayerDTO playerDTO = this.playerDTO.stream()
+                .filter(p -> p.playerName == playerMovedEvent.name)
+                .findFirst().get();
+        playerDTO.place = playerMovedEvent.newPlace;
+    }
+
+    @Override
+    public void save(PlayerSentToPenaltyBox playerSentToPenaltyBoxEvent) {
+        PlayerDTO playerDTO = this.playerDTO.stream()
+                .filter(p -> p.playerName == playerSentToPenaltyBoxEvent.name)
+                .findFirst().get();
+        playerDTO.isInPenaltyBox = true;
     }
 }

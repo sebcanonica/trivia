@@ -35,7 +35,7 @@ public class GameHandler {
     static void handlePlayerMoved(PlayerMoved playerMoved) {
         System.out.println(playerMoved.name
                 + "'s new location is "
-                + playerMoved.newLocation);
+                + playerMoved.newPlace);
     }
 
     static void handleQuestionAsked(QuestionAsked questionAsked) {

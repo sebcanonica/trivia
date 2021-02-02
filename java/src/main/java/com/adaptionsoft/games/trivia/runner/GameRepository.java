@@ -1,12 +1,14 @@
 package com.adaptionsoft.games.trivia.runner;
 
-import com.adaptionsoft.games.uglytrivia.Game;
-import com.adaptionsoft.games.uglytrivia.GoldCoinWon;
-import com.adaptionsoft.games.uglytrivia.PlayerAdded;
+import com.adaptionsoft.games.uglytrivia.*;
 
 public interface GameRepository {
     Game getGame();
 
     void save(PlayerAdded playerAddedEvent);
     void save(GoldCoinWon goldCoinWonEvent);
+
+    void save(PlayerMoved playerMovedEvent);
+
+    void save(PlayerSentToPenaltyBox playerSentToPenaltyBoxEvent);
 }

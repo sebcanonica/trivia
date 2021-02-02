@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.adaptionsoft.games.trivia.PlayerWon;
-import com.adaptionsoft.games.uglytrivia.Deck;
-import com.adaptionsoft.games.uglytrivia.EventPublisher;
-import com.adaptionsoft.games.uglytrivia.Game;
-import com.adaptionsoft.games.uglytrivia.PlayerAdded;
+import com.adaptionsoft.games.uglytrivia.*;
 
 
 public class GameRunner {
@@ -26,7 +23,10 @@ public class GameRunner {
 
 		Game aGame = new Game(createDeck(), new ArrayList<>(), 0, false);
 		GameRepository gameRepository = new InMemoryGameRepository(aGame);
-		eventPublisher.registerHandler(PlayerAdded.class, gameRepository::save);
+        eventPublisher.registerHandler(PlayerAdded.class, gameRepository::save);
+        eventPublisher.registerHandler(GoldCoinWon.class, gameRepository::save);
+        eventPublisher.registerHandler(PlayerMoved.class, gameRepository::save);
+        eventPublisher.registerHandler(PlayerSentToPenaltyBox.class, gameRepository::save);
 
 		setupGame(eventPublisher, gameRepository);
 // ici on pourrait appeler gamerepository

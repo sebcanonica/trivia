@@ -3,11 +3,11 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.Objects;
 
 public class PlayerMoved {
-    public final int newLocation;
+    public final int newPlace;
     public final String name;
 
-    public PlayerMoved(int newLocation, String name) {
-        this.newLocation = newLocation;
+    public PlayerMoved(int newPlace, String name) {
+        this.newPlace = newPlace;
         this.name = name;
     }
 
@@ -16,19 +16,19 @@ public class PlayerMoved {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerMoved that = (PlayerMoved) o;
-        return newLocation == that.newLocation &&
+        return newPlace == that.newPlace &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(newLocation, name);
+        return Objects.hash(newPlace, name);
     }
 
     @Override
     public String toString() {
         return "PlayerMoved{" +
-                "newLocation=" + newLocation +
+                "newLocation=" + newPlace +
                 ", name='" + name + '\'' +
                 '}';
     }

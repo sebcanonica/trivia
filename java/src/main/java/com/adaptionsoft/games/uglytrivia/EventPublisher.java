@@ -36,4 +36,5 @@ public class EventPublisher implements IPublishEvent {
         List<Consumer> consumerList = handlers.computeIfAbsent(clazz, k -> new ArrayList<>());
         consumerList.add(handler);
     }
+
 }

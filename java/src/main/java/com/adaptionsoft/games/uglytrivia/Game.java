@@ -24,7 +24,6 @@ import com.adaptionsoft.games.trivia.PlayerWon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Game {
     final List<Player> players;
@@ -83,7 +82,7 @@ public class Game {
     private List<Object> movePlayer(int roll) {
         Player player = players.get(currentPlayer);
         PlayerMoved playerMoved = player.move(roll);
-        QuestionAsked questionAsked = deck.drawQuestionFor(currentCategory(playerMoved.newLocation));
+        QuestionAsked questionAsked = deck.drawQuestionFor(currentCategory(playerMoved.newPlace));
         return Arrays.asList(playerMoved, questionAsked);
     }
 
